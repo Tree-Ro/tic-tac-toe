@@ -1,7 +1,7 @@
 //(function () {
 const ticTacToe = {
     //Represents a 3x3 gameboard
-    gameBoard: ['', '', '', '', 'a', '', '', '', ''],
+    gameBoard: ['', '', '', '', '', '', '', '', ''],
 
     //Indexes in gameboard for a win
     winConditions: [
@@ -15,6 +15,10 @@ const ticTacToe = {
         [2, 4, 6],
     ],
 
+    p1: undefined,
+    p2: undefined,
+    currentPlayer: undefined,
+
     //Initialises the game/page
     init: function () {
         this.cacheDom();
@@ -23,17 +27,87 @@ const ticTacToe = {
 
     //Caches all DOM nodes/elements
     cacheDom: function () {
-        // Cache Dom elements here
+        this.scoreBoxP1 = document.querySelector('.score-p1');
+        this.scoreBoxP2 = document.querySelector('.score-p2');
+
+        this.tttCells = document.querySelectorAll('.ttt-cell');
+        this.tttContainer = document.querySelector('.ttt-container');
+
+        this.startButton = document.querySelector('.start');
+        this.addP1Button = document.querySelector('.add-p1');
+        this.addP2Button = document.querySelector('.add-p2');
+        this.resetButton = document.querySelector('.reset');
     },
 
     //Binds events to the webpage
     bindEvents: function () {
-        //Bind events here
+        this.addP1Button.addEventListener('click', () => {
+            this.p1 = new this.Player('Player 1', 'X');
+            this.scoreBoxP1.setAttribute('style', 'color:var(--main-color)');
+        });
+        this.addP2Button.addEventListener('click', () => {
+            this.p2 = new this.Player('Player 2', 'O');
+            this.scoreBoxP2.setAttribute('style', 'color:var(--main-color)');
+        });
+        this.resetButton.addEventListener('click', () => {
+            this.fullResetBoard();
+        });
+        this.startButton.addEventListener('click', () => {
+            this.start();
+        });
+
+        addCellListeners = () => {
+            console.log('listeners added');
+            const nodeArray = Array.from(this.tttCells);
+            this.tttCells.forEach((cell) => {
+                cell.addEventListener(
+                    'click',
+                    (event) => {
+                        //if there is a currentPlayer, place that players marker
+                        if (this.currentPlayer) {
+                            this.currentPlayer.placeMarker(
+                                nodeArray.indexOf(event.target)
+                            );
+                        }
+                        this.alternateCurrentPlayer();
+                        this.render();
+                    },
+                    { once: true }
+                );
+            });
+        };
     },
 
-    //Renders/creates the elements in the html
+    //Appends the elements to the html
     render: function () {
-        //Render Elements Here
+        //Checks currentBoard and adds corresponding marker in the html
+        const currentBoard = this.checkCurrentBoard();
+        for (const player in currentBoard) {
+            const positions = currentBoard[player];
+            for (const key in positions) {
+                const value = positions[key];
+
+                if (value >= 0) {
+                    if (player === 'xPositions') {
+                        this.tttCells[value].appendChild(
+                            this.createMarker('cross')
+                        );
+                    } else if (player === 'oPositions') {
+                        this.tttCells[value].appendChild(
+                            this.createMarker('circle')
+                        );
+                    }
+                }
+            }
+        }
+    },
+
+    alternateCurrentPlayer: function () {
+        if (this.currentPlayer === this.p1) {
+            this.currentPlayer = this.p2;
+        } else if (this.currentPlayer === this.p2) {
+            this.currentPlayer = this.p1;
+        }
     },
 
     //Other functions -->>
@@ -42,14 +116,50 @@ const ticTacToe = {
         this.marker = marker.toUpperCase();
         this.placeMarker = function (gameBoardIndex) {
             ticTacToe.gameBoard[gameBoardIndex] = this.marker;
-            return ticTacToe.checkGameState();
         };
     },
 
-    resetBoard: function () {
+    start: function () {
+        this.fullResetBoard();
+
+        if (!this.p1) {
+            this.addP1Button.click();
+        }
+        if (!this.p2) {
+            this.addP2Button.click();
+        }
+
+        const randomNum = Math.random();
+        if (randomNum >= 0.5) {
+            this.currentPlayer = this.p1;
+        } else if (randomNum <= 0.5) {
+            this.currentPlayer = this.p2;
+        }
+        console.log('currentPlayer: ', this.currentPlayer);
+    },
+
+    fullResetBoard: function () {
         for (let i = 0; i < this.gameBoard.length; i++) {
             this.gameBoard[i] = '';
         }
+
+        this.clearHtmlBoard();
+    },
+
+    clearHtmlBoard: function () {
+        document.querySelectorAll('.ttt-container > *').forEach((cell) => {
+            cell.remove();
+        });
+
+        for (i = 0; i < 9; ++i) {
+            const div = document.createElement('div');
+            div.setAttribute('class', 'ttt-cell');
+
+            this.tttContainer.appendChild(div);
+        }
+
+        this.tttCells = document.querySelectorAll('.ttt-cell');
+        addCellListeners();
     },
 
     checkCurrentBoard: function (gameBoard = this.gameBoard) {
@@ -91,10 +201,13 @@ const ticTacToe = {
         //Else return false (continue)
         return false;
     },
+
+    createMarker: function (markerClass) {
+        const div = document.createElement('div');
+        div.setAttribute('class', markerClass);
+        return div;
+    },
 };
 
 ticTacToe.init();
-
-const p1 = new ticTacToe.Player('Player 1', 'X');
-const p2 = new ticTacToe.Player('Player 2', 'O');
 //})();

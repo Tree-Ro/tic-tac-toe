@@ -43,6 +43,10 @@ body {
     
     font-weight: bold;
 }
+.main-container .score-container .score-p1,
+.main-container .score-container .score-p2 {
+    color: rgb(87, 87, 87);
+}
 .main-container .ttt-container {
     grid-column: 1 / -1;
 
