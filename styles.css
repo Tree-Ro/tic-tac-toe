@@ -1,3 +1,11 @@
+:root {
+    --background: #292929;
+    --main-color: #F9F6EE;
+}
+
 html {
-    background-color: #292929;
+    background-color: var(--background);
+    color: var(--main-color);
+
+    height: 100%;
 }

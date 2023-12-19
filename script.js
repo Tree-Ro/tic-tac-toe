@@ -96,4 +96,5 @@ const ticTacToe = {
 ticTacToe.init();
 
 const p1 = new ticTacToe.Player('Player 1', 'X');
+const p2 = new ticTacToe.Player('Player 2', 'O');
 //})();
