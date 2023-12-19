@@ -1,7 +1,7 @@
 //(function () {
 const ticTacToe = {
     //Represents a 3x3 gameboard
-    gameBoard: ['', '', '', '', '', '', '', '', ''],
+    gameBoard: ['', '', '', '', 'a', '', '', '', ''],
 
     //Indexes in gameboard for a win
     winConditions: [
@@ -17,27 +17,39 @@ const ticTacToe = {
 
     //Initialises the game/page
     init: function () {
-        this.resetBoard();
         this.cacheDom();
+        this.bindEvents();
     },
 
     //Caches all DOM nodes/elements
-    cacheDom: function () {},
+    cacheDom: function () {
+        // Cache Dom elements here
+    },
 
     //Binds events to the webpage
-    bindEvents: function () {},
+    bindEvents: function () {
+        //Bind events here
+    },
 
     //Renders/creates the elements in the html
-    render: function () {},
+    render: function () {
+        //Render Elements Here
+    },
 
     //Other functions -->>
-    CreatePlayer: function (name, marker) {
+    Player: function (name, marker) {
         this.name = name;
         this.marker = marker.toUpperCase();
+        this.placeMarker = function (gameBoardIndex) {
+            ticTacToe.gameBoard[gameBoardIndex] = this.marker;
+            return ticTacToe.checkGameState();
+        };
     },
 
     resetBoard: function () {
-        this.gameBoard = ['X', 'X', 'O', 'O', 'O', 'X', 'X', 'O', 'O'];
+        for (let i = 0; i < this.gameBoard.length; i++) {
+            this.gameBoard[i] = '';
+        }
     },
 
     checkCurrentBoard: function (gameBoard = this.gameBoard) {
@@ -80,6 +92,8 @@ const ticTacToe = {
         return false;
     },
 };
-console.log();
+
 ticTacToe.init();
+
+const p1 = new ticTacToe.Player('Player 1', 'X');
 //})();
