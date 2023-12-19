@@ -71,6 +71,7 @@ const ticTacToe = {
                         }
                         this.alternateCurrentPlayer();
                         this.render();
+                        this.checkGameState();
                     },
                     { once: true }
                 );
@@ -162,6 +163,17 @@ const ticTacToe = {
         addCellListeners();
     },
 
+    highlightWinPattern: function (winCondition) {
+        for (index in winCondition) {
+            const value = winCondition[index];
+            console.log(value);
+            this.tttCells[value].setAttribute(
+                'style',
+                'border: 4px solid #40b531; border-radius: 4px;'
+            );
+        }
+    },
+
     checkCurrentBoard: function (gameBoard = this.gameBoard) {
         //Fills out two arrays with current positions of X and O
         let currentBoard = {
@@ -178,7 +190,7 @@ const ticTacToe = {
         return currentBoard;
     },
 
-    checkGameState: function (gameBoard) {
+    checkGameState: function (gameBoard = this.gameBoard) {
         const currentBoard = this.checkCurrentBoard();
 
         //Compares the current positions of X and O to this.winConditions
@@ -186,6 +198,7 @@ const ticTacToe = {
             const positions = currentBoard[player];
             for (const condition of this.winConditions) {
                 if (condition.every((cell) => positions.includes(cell))) {
+                    this.highlightWinPattern(condition);
                     return player; // Returns the player ('X' or 'O') that matches the win condition
                 }
             }
