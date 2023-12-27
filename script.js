@@ -251,10 +251,13 @@ const ticTacToe = {
         if (gameState) {
             if (gameState === 'draw') {
                 this.dialogBox.textContent = `It's a draw!`;
+                this.dialogBox.setAttribute('style', 'color: gray');
             } else if (gameState === 'xPositions') {
                 this.dialogBox.textContent = `X Wins!`;
+                this.dialogBox.setAttribute('style', 'color: green');
             } else if (gameState === 'oPositions') {
                 this.dialogBox.textContent = `O Wins!`;
+                this.dialogBox.setAttribute('style', 'color: green');
             }
 
             this.dialogBox.showModal();

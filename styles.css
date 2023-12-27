@@ -148,5 +148,17 @@ body {
 
 dialog[open] {
     margin: auto;
-    place-self: center;
+    padding: 30px;
+    font-weight: bold;
+
+
+    background-color: #111111;
+    border-radius: 5px;
+    border: 3px solid;
+}
+dialog[open]:focus-visible {
+    outline: none;
+}
+dialog[open]::backdrop {
+    background-color: rgba(0, 0, 0, 0.397);
 }
