@@ -34,21 +34,11 @@ const ticTacToe = {
         this.tttContainer = document.querySelector('.ttt-container');
 
         this.startButton = document.querySelector('.start');
-        this.addP1Button = document.querySelector('.add-p1');
-        this.addP2Button = document.querySelector('.add-p2');
         this.resetButton = document.querySelector('.reset');
     },
 
     //Binds events to the webpage
     bindEvents: function () {
-        this.addP1Button.addEventListener('click', () => {
-            this.p1 = new this.Player('Player 1', 'X');
-            this.scoreBoxP1.setAttribute('style', 'color:var(--main-color)');
-        });
-        this.addP2Button.addEventListener('click', () => {
-            this.p2 = new this.Player('Player 2', 'O');
-            this.scoreBoxP2.setAttribute('style', 'color:var(--main-color)');
-        });
         this.resetButton.addEventListener('click', () => {
             this.fullResetBoard();
         });
@@ -124,10 +114,12 @@ const ticTacToe = {
         this.fullResetBoard();
 
         if (!this.p1) {
-            this.addP1Button.click();
+            this.p1 = new this.Player('Player 1', 'X');
+            this.scoreBoxP1.setAttribute('style', 'color:var(--main-color)');
         }
         if (!this.p2) {
-            this.addP2Button.click();
+            this.p2 = new this.Player('Player 2', 'O');
+            this.scoreBoxP2.setAttribute('style', 'color:var(--main-color)');
         }
 
         const randomNum = Math.random();
