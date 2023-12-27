@@ -145,3 +145,8 @@ body {
 .main-container .buttons button:active {
     background-color: #303030;
 }
+
+dialog[open] {
+    margin: auto;
+    place-self: center;
+}

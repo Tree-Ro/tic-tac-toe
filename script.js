@@ -23,10 +23,14 @@ const ticTacToe = {
     init: function () {
         this.cacheDom();
         this.bindEvents();
+        this.start();
     },
 
     //Caches all DOM nodes/elements
     cacheDom: function () {
+        this.mainContainer = document.querySelector('.main-container');
+        this.dialogBox = document.querySelector('.state-dialog');
+
         this.scoreBoxP1 = document.querySelector('.score-p1');
         this.scoreBoxP2 = document.querySelector('.score-p2');
 
@@ -39,8 +43,14 @@ const ticTacToe = {
 
     //Binds events to the webpage
     bindEvents: function () {
+        this.dialogBox.addEventListener('click', () => {
+            this.dialogBox.close();
+            this.fullResetBoard();
+        });
+
         this.resetButton.addEventListener('click', () => {
             this.fullResetBoard();
+            this.resetScore();
         });
         this.startButton.addEventListener('click', () => {
             this.start();
@@ -63,13 +73,14 @@ const ticTacToe = {
                         const gameState = this.checkGameState();
 
                         if (gameState === 'draw') {
+                            this.showGameState(gameState);
                         } else if (
                             gameState === 'xPositions' ||
                             gameState === 'oPositions'
                         ) {
                             this.currentPlayer.score += 1;
-                            this.scoreBoxP1.textContent = `X Score: ${this.p1.score}`;
-                            this.scoreBoxP2.textContent = `O Score: ${this.p2.score}`;
+                            this.displayScore();
+                            this.showGameState(gameState);
                         }
 
                         this.render();
@@ -134,6 +145,7 @@ const ticTacToe = {
         }
 
         this.fullResetBoard();
+        this.resetScore();
 
         const randomNum = Math.random();
         if (randomNum >= 0.5) {
@@ -148,11 +160,6 @@ const ticTacToe = {
         for (let i = 0; i < this.gameBoard.length; i++) {
             this.gameBoard[i] = '';
         }
-        this.p1.score = 0;
-        this.p2.score = 0;
-        this.scoreBoxP1.textContent = `X Score: ${this.p1.score}`;
-        this.scoreBoxP2.textContent = `O Score: ${this.p2.score}`;
-
         this.clearHtmlBoard();
     },
 
@@ -170,6 +177,17 @@ const ticTacToe = {
 
         this.tttCells = document.querySelectorAll('.ttt-cell');
         addCellListeners();
+    },
+
+    displayScore: function () {
+        this.scoreBoxP1.textContent = `X Score: ${this.p1.score}`;
+        this.scoreBoxP2.textContent = `O Score: ${this.p2.score}`;
+    },
+
+    resetScore: function () {
+        this.p1.score = 0;
+        this.p2.score = 0;
+        this.displayScore();
     },
 
     highlightWinPattern: function (winCondition) {
@@ -227,6 +245,12 @@ const ticTacToe = {
         const div = document.createElement('div');
         div.setAttribute('class', markerClass);
         return div;
+    },
+
+    showGameState: function (gameState = this.checkGameState()) {
+        if (gameState) {
+            this.dialogBox.showModal();
+        }
     },
 };
 
