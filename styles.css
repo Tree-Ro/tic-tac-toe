@@ -46,6 +46,7 @@ body {
 .main-container .score-container .score-p1,
 .main-container .score-container .score-p2 {
     color: rgb(87, 87, 87);
+    transition: 0.2s;
 }
 .main-container .ttt-container {
     grid-column: 1 / -1;

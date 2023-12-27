@@ -119,8 +119,20 @@ const ticTacToe = {
     alternateCurrentPlayer: function () {
         if (this.currentPlayer === this.p1) {
             this.currentPlayer = this.p2;
+
+            this.scoreBoxP2.setAttribute(
+                'style',
+                'scale: 1.25; color: var(--main-color);'
+            );
+            this.scoreBoxP1.setAttribute('style', 'scale: 1');
         } else if (this.currentPlayer === this.p2) {
             this.currentPlayer = this.p1;
+
+            this.scoreBoxP1.setAttribute(
+                'style',
+                'scale: 1.25; color: var(--main-color);'
+            );
+            this.scoreBoxP2.setAttribute('style', 'scale: 1');
         }
     },
 
@@ -146,13 +158,17 @@ const ticTacToe = {
 
         this.fullResetBoard();
         this.resetScore();
+        this.setCurrentPlayer();
+    },
 
+    setCurrentPlayer: function () {
         const randomNum = Math.random();
         if (randomNum >= 0.5) {
             this.currentPlayer = this.p1;
         } else if (randomNum <= 0.5) {
             this.currentPlayer = this.p2;
         }
+        this.alternateCurrentPlayer();
         console.log('currentPlayer: ', this.currentPlayer);
     },
 
@@ -161,6 +177,7 @@ const ticTacToe = {
             this.gameBoard[i] = '';
         }
         this.clearHtmlBoard();
+        this.setCurrentPlayer();
     },
 
     clearHtmlBoard: function () {
