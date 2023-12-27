@@ -249,6 +249,14 @@ const ticTacToe = {
 
     showGameState: function (gameState = this.checkGameState()) {
         if (gameState) {
+            if (gameState === 'draw') {
+                this.dialogBox.textContent = `It's a draw!`;
+            } else if (gameState === 'xPositions') {
+                this.dialogBox.textContent = `X Wins!`;
+            } else if (gameState === 'oPositions') {
+                this.dialogBox.textContent = `O Wins!`;
+            }
+
             this.dialogBox.showModal();
         }
     },
