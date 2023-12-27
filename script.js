@@ -59,9 +59,21 @@ const ticTacToe = {
                                 nodeArray.indexOf(event.target)
                             );
                         }
-                        this.alternateCurrentPlayer();
+
+                        const gameState = this.checkGameState();
+
+                        if (gameState === 'draw') {
+                        } else if (
+                            gameState === 'xPositions' ||
+                            gameState === 'oPositions'
+                        ) {
+                            this.currentPlayer.score += 1;
+                            this.scoreBoxP1.textContent = `X Score: ${this.p1.score}`;
+                            this.scoreBoxP2.textContent = `O Score: ${this.p2.score}`;
+                        }
+
                         this.render();
-                        this.checkGameState();
+                        this.alternateCurrentPlayer();
                     },
                     { once: true }
                 );
@@ -102,17 +114,16 @@ const ticTacToe = {
     },
 
     //Other functions -->>
-    Player: function (name, marker) {
+    Player: function (name, marker, score = 0) {
         this.name = name;
         this.marker = marker.toUpperCase();
         this.placeMarker = function (gameBoardIndex) {
             ticTacToe.gameBoard[gameBoardIndex] = this.marker;
         };
+        this.score = score;
     },
 
     start: function () {
-        this.fullResetBoard();
-
         if (!this.p1) {
             this.p1 = new this.Player('Player 1', 'X');
             this.scoreBoxP1.setAttribute('style', 'color:var(--main-color)');
@@ -121,6 +132,8 @@ const ticTacToe = {
             this.p2 = new this.Player('Player 2', 'O');
             this.scoreBoxP2.setAttribute('style', 'color:var(--main-color)');
         }
+
+        this.fullResetBoard();
 
         const randomNum = Math.random();
         if (randomNum >= 0.5) {
@@ -135,6 +148,10 @@ const ticTacToe = {
         for (let i = 0; i < this.gameBoard.length; i++) {
             this.gameBoard[i] = '';
         }
+        this.p1.score = 0;
+        this.p2.score = 0;
+        this.scoreBoxP1.textContent = `X Score: ${this.p1.score}`;
+        this.scoreBoxP2.textContent = `O Score: ${this.p2.score}`;
 
         this.clearHtmlBoard();
     },
@@ -158,7 +175,6 @@ const ticTacToe = {
     highlightWinPattern: function (winCondition) {
         for (index in winCondition) {
             const value = winCondition[index];
-            console.log(value);
             this.tttCells[value].setAttribute(
                 'style',
                 'border: 4px solid #40b531; border-radius: 4px;'
